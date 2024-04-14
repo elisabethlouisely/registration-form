@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Piano</title>
+    <style>
+      html {
+        box-sizing: border-box;
+      }
+
+      *,
+      ::before,
+      ::after {
+        box-sizing: inherit;
+      }
+
+      #piano {
+        background-color: #00471b;
+        width: 992px;
+        height: 290px;
+        margin: 80px auto;
+        padding: 90px 20px 0 20px;
+        position: relative;
+        border-radius: 10px;
+      }
+
+      .keys {
+        background-color: #040404;
+        width: 949px;
+        height: 180px;
+        padding-left: 2px;
+        padding: 90px 20px 0 20px;
+        overflow: hidden;
+      }
+
+      .key {
+        background-color: #ffffff;
+        position: relative;
+        width: 41px;
+        height: 175px;
+        margin: 2px;
+        float: left;
+        border-radius: 0 0 3px 3px;
+      }
+
+      .key.black--key::after {
+        background-color: #1d1e22;
+
+        /* The content property is used to set or override the content of the element. 
+        By default, the pseudo-elements created by the ::before and ::after pseudo-selectors are empty, and the elements will not be rendered to the page. 
+        Setting the content property to an empty string "" will ensure the element is rendered to the page while still being empty. */
+        content: "";
+        position: absolute;
+        left: -18px;
+        width: 32px;
+        height: 100px;
+        border-radius: 0 0 3px 3px;
+      }
+
+      .logo {
+        width: 200px;
+        position: absolute;
+        top: 23px;
+      }
+
+      /* The @media at-rule, also known as a media query, is used to conditionally apply CSS. 
+      Media queries are commonly used to apply CSS based on the viewport width using the max-width and min-width properties. */
+      @media (max-width: 768px) {
+        .card {
+          padding: 2rem;
+        }
+
+        #piano {
+          width: 358px;
+        }
+
+        .keys {
+          width: 318px;
+        }
+
+        .logo {
+          width: 150px;
+        }
+      }
+
+      @media (max-width: 1199px) and (min-width: 769px) {
+        #piano {
+          width: 675px;
+        }
+
+        .keys {
+          width: 633px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- - The ::before selector creates a pseudo-element which is the first child of the selected element.
+- The ::after selector creates a pseudo-element which is the last child of the selected element.
+- These pseudo-elements are often used to create cosmetic content, which you will see later in this project.
+
+- inherit, which will tell the targeted elements to use the same value as the parent element. 
+-->
+
+    <div id="piano">
+      <img
+        src="https://cdn.freecodecamp.org/platform/universal/fcc_primary.svg"
+        alt="freeCodeCamp Logo"
+        class="logo" />
+      <div class="keys">
+        <div class="key"></div>
+        <div class="key black--key"></div>
+        <div class="key black--key"></div>
+        <div class="key"></div>
+        <div class="key black--key"></div>
+        <div class="key black--key"></div>
+        <div class="key black--key"></div>
+
+        <div class="key"></div>
+        <div class="key black--key"></div>
+        <div class="key black--key"></div>
+        <div class="key"></div>
+        <div class="key black--key"></div>
+        <div class="key black--key"></div>
+        <div class="key black--key"></div>
+
+        <div class="key"></div>
+        <div class="key black--key"></div>
+        <div class="key black--key"></div>
+        <div class="key"></div>
+        <div class="key black--key"></div>
+        <div class="key black--key"></div>
+        <div class="key black--key"></div>
+      </div>
+    </div>
+  </body>
+</html>

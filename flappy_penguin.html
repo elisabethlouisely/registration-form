@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flappy Penguin</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      :root {
+        --penguin-face: white;
+        --penguin-picorna: orange;
+        --penguin-skin: gray;
+      }
+
+      @keyframes wave {
+        /*
+        Give wave four waypoints starting at 10%, and incrementing by 10%.
+        */
+        10% {
+          /*
+            Within the first waypoint, rotate to 110deg, and retain the scaling of the left arm.
+            */
+          transform: rotate(110deg) scaleX(-1);
+        }
+        20% {
+          transform: rotate(130deg) scaleX(-1);
+        }
+        30% {
+          transform: rotate(110deg) scaleX(-1);
+        }
+        40% {
+          transform: rotate(130deg) scaleX(-1);
+        }
+      }
+
+      body {
+        background: linear-gradient(
+          45deg,
+          rgb(118, 201, 255),
+          rgb(247, 255, 222)
+        );
+
+        /*
+        Normalise your page's sizing, by removing the body element's margin and padding.
+        */
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100vh;
+
+        /*
+        Remove both the horizontal and vertical scrollbars, using only one property.
+        */
+        overflow: hidden;
+      }
+
+      .left-mountain {
+        width: 300px;
+        height: 300px;
+        margin-top: 100px;
+
+        /*
+        To prevent the mountain from pushing the .ground element, adjust its position 
+        to prevent it from taking up space in the page layout.
+        */
+        position: absolute;
+
+        background: linear-gradient(rgb(203, 241, 228), rgb(80, 183, 255));
+
+        /*
+        To make the mountain look more like a mountain, you can use the skew transform function, which takes two arguments.
+        The first being an angle to shear the x-axis by, and the second being an angle to shear the y-axis by.
+
+        Use the transform property to skew the mountain by 0deg in the x-axis and 44deg in the y-axis.
+        */
+        transform: skew(0deg, 44deg);
+
+        z-index: 2;
+      }
+
+      .back-mountain {
+        width: 300px;
+        height: 300px;
+        left: 110px;
+        top: 225px;
+
+        position: absolute;
+
+        background: linear-gradient(rgb(203, 241, 228), rgb(47, 170, 255));
+
+        z-index: 1;
+
+        transform: rotate(45deg);
+      }
+
+      .sun {
+        width: 200px;
+        height: 200px;
+        background-color: yellow;
+        position: absolute;
+        border-radius: 50%;
+
+        /*
+        Position the sun in the top right corner of the screen such that 75px 
+        of its top and right edges are off screen.
+        */
+        top: -75px;
+        right: -75px;
+      }
+
+      .penguin {
+        width: 300px;
+        height: 300px;
+        margin: 75px auto;
+        position: relative;
+        z-index: 4;
+
+        /*
+        Change the .penguin element's transition behavior during transformation 
+        to have a duration of 1s, a timing function of ease-in-out, and a delay of 0ms.
+        */
+        transition: 1s ease-in-out 0ms;
+      }
+
+      /*
+    Target all descendent elements of the .penguin element.
+      */
+      .penguin * {
+        position: absolute;
+      }
+
+      .penguin:active {
+        /*
+        Increase its size by 50% in both dimensions.
+        */
+        transform: scale(1.5);
+
+        /*
+        When you activate the .penguin element, it might look as 
+        though you can drag it around. This is not true.
+
+        Indicate this to users, by giving the active element 
+        a cursor property of not-allowed.
+        */
+        cursor: not-allowed;
+      }
+
+      .penguin-head {
+        width: 50%;
+        height: 45%;
+        top: 10%;
+        left: 25%;
+
+        /*
+        Give the penguin a slightly oval head by setting the radius 
+        of the top corners to 70% and the radius of the bottom corners to 65%.
+        */
+        border-radius: 70% 70% 65% 65%;
+        background: linear-gradient(
+          45deg,
+          var(--penguin-skin),
+          rgb(239, 240, 228)
+        );
+
+        z-index: 1;
+      }
+
+      .face {
+        width: 60%;
+        height: 70%;
+        top: 15%;
+        border-radius: 70% 70% 60% 60%;
+        background-color: var(--penguin-face);
+      }
+
+      .face.left {
+        left: 5%;
+      }
+
+      .face.right {
+        right: 5%;
+      }
+
+      .chin {
+        width: 90%;
+        height: 70%;
+        top: 25%;
+        left: 5%;
+        border-radius: 70% 70% 100% 100%;
+        background-color: var(--penguin-face);
+      }
+
+      .eye {
+        width: 15%;
+        height: 17%;
+        top: 45%;
+        border-radius: 50%;
+        background-color: black;
+      }
+
+      .eye.left {
+        left: 25%;
+      }
+
+      .eye.right {
+        right: 25%;
+      }
+
+      .eye-lid {
+        width: 150%;
+        height: 100%;
+        top: 25%;
+        left: -23%;
+        border-radius: 50%;
+        background-color: var(--penguin-face);
+      }
+
+      .blush {
+        width: 15%;
+        height: 10%;
+        top: 65%;
+        border-radius: 50%;
+        background-color: pink;
+      }
+
+      .blush.left {
+        left: 15%;
+      }
+
+      .blush.right {
+        right: 15%;
+      }
+
+      .beak {
+        height: 10%;
+        background-color: var(--penguin-picorna);
+        border-radius: 50%;
+      }
+
+      .beak.top {
+        width: 20%;
+        top: 60%;
+        left: 40%;
+      }
+
+      .beak.bottom {
+        width: 16%;
+        top: 65%;
+        left: 42%;
+      }
+
+      .penguin-body {
+        width: 53%;
+        height: 45%;
+        top: 40%;
+        left: 23.5%;
+
+        background: linear-gradient(
+          45deg,
+          rgb(134, 133, 133) 0%,
+          rgb(234, 231, 231) 25%,
+          white 67%
+        );
+
+        border-radius: 80% 80% 100% 100%;
+      }
+
+      /*
+      To give the penguin body a crest, create a pseudo-element that is the first child of the .penguin-body element. 
+      Set the content property of the pseudo-element to an empty string.
+      */
+      .penguin-body::before {
+        content: "";
+        position: absolute;
+        width: 50%;
+        height: 45%;
+        top: 10%;
+        left: 25%;
+        background-color: var(--penguin-skin);
+
+        /*
+        Increase the pseudo-element's transparency by 30%.
+        */
+        opacity: 70%;
+
+        /*
+        Round off the crest, by giving the pseudo-element bottom corners a radius of 100%, 
+        leaving the top corners at 0%.
+        */
+        border-radius: 0% 0% 100% 100%;
+      }
+
+      .arm {
+        width: 30%;
+        height: 60%;
+        border-radius: 30% 30% 30% 120%;
+
+        background: linear-gradient(
+          90deg,
+          var(--penguin-skin),
+          rgb(209, 210, 199)
+        );
+
+        z-index: -1;
+      }
+
+      .arm.left {
+        top: 35%;
+        left: 5%;
+        transform-origin: top left; /* Or 0% 0%*/
+        transform: rotate(130deg) scaleX(-1);
+        animation: wave 3s infinite linear;
+      }
+
+      .arm.right {
+        top: 0%;
+        right: -5%;
+        transform: rotate(-45deg);
+      }
+
+      .foot {
+        width: 15%;
+        height: 30%;
+        top: 85%;
+        border-radius: 50%;
+        background-color: var(--penguin-picorna);
+
+        z-index: -1;
+      }
+
+      .foot.left {
+        left: 25%;
+        transform: rotate(80deg);
+      }
+
+      .foot.right {
+        right: 25%;
+        transform: rotate(-80deg);
+      }
+
+      .shirt {
+        font: bold 25px Helvetica, sans-serif;
+        top: 165px;
+        left: 127.5px;
+        color: #6a6969;
+
+        z-index: 1;
+      }
+
+      /*
+      In some browsers, the heart emoji may look slightly different from the previous step. 
+      This is because some of the character's properties were overridden by the font-weight style of bold.
+      */
+
+      .shirt div {
+        font-weight: normal;
+        top: 22.5px;
+        left: 12px;
+      }
+
+      .ground {
+        width: 100vw;
+
+        /*
+        calculate the height of the .ground element to be the height 
+        of the viewport minus the height of the .penguin element.
+        */
+        height: calc(100vh - 300px);
+        margin-top: -58px;
+
+        background: linear-gradient(
+          90deg,
+          rgb(88, 175, 236),
+          rgb(182, 255, 255)
+        );
+
+        /*
+        As the .ground element will be third in the stacking context of the page layout.
+        */
+        z-index: 3;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+        To create some scenery in the background, you will add two mountains.
+    -->
+    <div class="left-mountain"></div>
+    <div class="back-mountain"></div>
+    <div class="sun"></div>
+
+    <!--
+        This div will contain Flappy Penguin.
+    -->
+    <div class="penguin">
+      <div class="penguin-head">
+        <div class="face left"></div>
+        <div class="face right"></div>
+        <div class="chin"></div>
+        <div class="eye left">
+          <div class="eye-lid"></div>
+        </div>
+        <div class="eye right">
+          <div class="eye-lid"></div>
+        </div>
+        <div class="blush left"></div>
+        <div class="blush right"></div>
+        <div class="beak top"></div>
+        <div class="beak bottom"></div>
+      </div>
+      <div class="penguin-body">
+        <div class="arm left"></div>
+        <div class="arm right"></div>
+        <div class="foot left"></div>
+        <div class="foot right"></div>
+      </div>
+      <div class="shirt">
+        <div>💜</div>
+        <p>I CSS</p>
+      </div>
+    </div>
+
+    <div class="ground"></div>
+  </body>
+</html>

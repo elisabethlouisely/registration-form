@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rothko Painting</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .frame {
+        border: 50px solid rgb(181, 85, 16);
+        width: 500px;
+        padding: 50px;
+        border-radius: 20px;
+
+        /* This will move the frame down 20 pixels and horizontally center it on the page. */
+        margin: 20px auto;
+      }
+
+      /* Even though your <div> has no text, it's still treated as a box with content. */
+      .canvas {
+        width: 500px;
+        height: 600px;
+        overflow: hidden;
+        filter: blur(2px);
+        background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+      }
+
+      .one,
+      .two {
+        filter: blur(1px);
+      }
+
+      .one {
+        width: 425px;
+        height: 150px;
+        margin: 20px auto;
+        border-radius: 9px;
+        transform: rotate(-0.6deg); /* counter clockwise */
+        box-shadow: 0 0 3px 3px rgb(238, 9, 121);
+        background: linear-gradient(
+          68.6deg,
+          rgb(252, 165, 241) 1.8%,
+          rgb(181, 255, 255) 100.5%
+        );
+      }
+
+      .two {
+        width: 475px;
+        height: 200px;
+        margin: 0 auto 20px;
+        border-top-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        border-top-right-radius: 10px;
+        border-bottom-left-radius: 10px;
+        transform: rotate(0.4deg); /* clockwise */
+        box-shadow: 0 0 3px 3px rgb(255, 12, 253);
+        background: linear-gradient(
+          -20deg,
+          #ddd6f3 0%,
+          #faaca8 100%,
+          #faaca8 100%
+        );
+      }
+
+      .three {
+        width: 91%;
+        height: 28%;
+        margin: auto;
+        /* top-left, top-right, bottom-right, and bottom-left corners. */
+        border-radius: 30px 25px 60px 12px;
+        transform: rotate(-0.2deg);
+        box-shadow: 0 0 3px 3px rgb(255, 241, 53);
+        filter: blur(2px);
+        background: linear-gradient(
+          123.5deg,
+          rgb(244, 219, 251) 29.3%,
+          rgb(255, 214, 214) 67.1%
+        );
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="canvas">
+        <div class="one"></div>
+        <div class="two"></div>
+        <div class="three"></div>
+      </div>
+    </div>
+  </body>
+</html>
